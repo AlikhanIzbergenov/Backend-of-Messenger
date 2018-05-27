@@ -38,7 +38,12 @@ sequelize.sync()
 
 io.on('connection', (socket) => {
   console.log('A user connected:' + socket.id)
-  io.emit('conn', socket.id)
+  io.emit('connected', socket.id)
+
+  socket.on('sendMessage', function (data) {
+    console.log(data)
+    socket.broadcast.emit('receivedMessage', data)
+  })
 
   socket.on('disconnect', function () {
     console.log('User left: ' + socket.id)
